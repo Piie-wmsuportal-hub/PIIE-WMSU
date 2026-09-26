@@ -140,19 +140,19 @@
           <h3 class="font-serif text-2xl font-bold text-slate-900">Department Bulletins & Announcements</h3>
         </div>
 
-        <!-- Filter Tabs (Forced Active on 'All') -->
+        <!-- Filter Tabs -->
         <div class="flex items-center gap-1.5 overflow-x-auto hide-scrollbar pb-1 text-xs">
-          <button id="tab-all" onclick="filterPosts('all')" class="bulletin-tab active-tab px-3.5 py-1.5 rounded-lg font-bold bg-wmsu-crimson text-white transition shrink-0" data-cat="all">All</button>
-          <button id="tab-academic" onclick="filterPosts('Academic')" class="bulletin-tab px-3.5 py-1.5 rounded-lg font-semibold bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition shrink-0" data-cat="Academic">Academic Memos</button>
-          <button id="tab-pies" onclick="filterPosts('PIES')" class="bulletin-tab px-3.5 py-1.5 rounded-lg font-semibold bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition shrink-0" data-cat="PIES">PIES Chapter</button>
-          <button id="tab-ojt" onclick="filterPosts('OJT')" class="bulletin-tab px-3.5 py-1.5 rounded-lg font-semibold bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition shrink-0" data-cat="OJT">OJT & Plant Visits</button>
-          <button id="tab-event" onclick="filterPosts('Event')" class="bulletin-tab px-3.5 py-1.5 rounded-lg font-semibold bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition shrink-0" data-cat="Event">Events</button>
+          <button onclick="filterPosts('all')" class="bulletin-tab active-tab px-3.5 py-1.5 rounded-lg font-bold bg-wmsu-crimson text-white transition shrink-0" data-cat="all">All</button>
+          <button onclick="filterPosts('Academic')" class="bulletin-tab px-3.5 py-1.5 rounded-lg font-semibold bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition shrink-0" data-cat="Academic">Academic Memos</button>
+          <button onclick="filterPosts('PIES')" class="bulletin-tab px-3.5 py-1.5 rounded-lg font-semibold bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition shrink-0" data-cat="PIES">PIES Chapter</button>
+          <button onclick="filterPosts('OJT')" class="bulletin-tab px-3.5 py-1.5 rounded-lg font-semibold bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition shrink-0" data-cat="OJT">OJT & Plant Visits</button>
+          <button onclick="filterPosts('Event')" class="bulletin-tab px-3.5 py-1.5 rounded-lg font-semibold bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition shrink-0" data-cat="Event">Events</button>
         </div>
       </div>
 
       <!-- Dynamic Post Grid -->
       <div id="bulletinGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        <div class="col-span-full py-8 text-center text-slate-400 text-xs">Connecting to departmental live stream...</div>
+        <div class="col-span-full py-8 text-center text-slate-400 text-xs">Loading announcements...</div>
       </div>
     </section>
 
@@ -360,7 +360,6 @@
         bulletins = record.bulletins || [];
         socials = record.socials || {};
         
-        // Force render all by default
         renderBulletins(bulletins);
         renderSocialChannels();
       } catch (err) {
@@ -469,6 +468,7 @@
       document.getElementById('socialPopup').classList.toggle('hidden');
     }
 
+    // Comprehensive category matcher (matches Event to Department Event, etc.)
     function filterPosts(cat) {
       document.querySelectorAll('.bulletin-tab').forEach(btn => {
         if (btn.dataset.cat.toLowerCase() === cat.toLowerCase()) {
@@ -481,8 +481,12 @@
       if (cat === 'all') {
         renderBulletins(bulletins);
       } else {
-        // Tolerant match (catches "Event" or "Department Event")
-        renderBulletins(bulletins.filter(b => b.category && (b.category.toLowerCase().includes(cat.toLowerCase()) || cat.toLowerCase().includes(b.category.toLowerCase()))));
+        renderBulletins(bulletins.filter(b => {
+          if (!b.category) return false;
+          const postCat = b.category.toLowerCase().trim();
+          const target = cat.toLowerCase().trim();
+          return postCat.includes(target) || target.includes(postCat);
+        }));
       }
     }
 
