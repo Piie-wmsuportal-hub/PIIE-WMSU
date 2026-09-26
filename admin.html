@@ -81,7 +81,7 @@
                 <option value="Academic">Academic Memo</option>
                 <option value="PIES">PIES Student Chapter</option>
                 <option value="OJT">OJT & Plant Visits</option>
-                <option value="Event">Department Event</option>
+                <option value="Event">Event</option>
               </select>
             </div>
           </div>
@@ -174,7 +174,6 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
           
-          <!-- SUBSECTION 1: CHANGE MASTER PIN -->
           <div class="bg-slate-950 border border-slate-800 p-5 rounded-2xl space-y-4">
             <div>
               <h4 class="font-bold text-white text-sm">Update Console Access PIN</h4>
@@ -196,7 +195,6 @@
             </form>
           </div>
 
-          <!-- SUBSECTION 2: INVITE / AUTHORIZE OFFICERS -->
           <div class="bg-slate-950 border border-slate-800 p-5 rounded-2xl space-y-4">
             <div>
               <h4 class="font-bold text-white text-sm">Authorized Officers Directory</h4>
@@ -230,11 +228,9 @@
   </div>
 
   <script>
-    // --- CONFIGURED CLOUD BIN CREDENTIALS ---
     const BIN_ID = "6ab7bc34ffd5d16053315598";
     const MASTER_KEY = "$2a$10$bT88xC6BfXoVDcPLZDt6auptMYUoWimb3bqrZr6WoU75bDVw9KclG";
 
-    // --- CONFIGURED CLOUDINARY MEDIA UPLOAD CREDENTIALS ---
     const CLOUDINARY_CLOUD_NAME = "wuyejn89"; 
     const CLOUDINARY_PRESET = "wmsu_ie_preset";
 
@@ -258,7 +254,7 @@
         if (!res.ok) throw new Error(`Server returned ${res.status}`);
         
         const json = await res.json();
-        currentCloudData = json.record;
+        currentCloudData = json.record || {};
         return currentCloudData;
       } catch (err) {
         console.warn("Using local cache fallback:", err);
@@ -361,7 +357,6 @@
       `).join('');
     }
 
-    // DIRECT LOCAL MEDIA UPLOAD HANDLER
     async function uploadMediaFile(file) {
       const isVideo = file.type.startsWith('video');
       const resourceType = isVideo ? 'video' : 'image';
@@ -395,7 +390,6 @@
       
       let mediaData = null;
 
-      // Handle Device File Upload if selected
       if (fileInput.files && fileInput.files[0]) {
         try {
           btn.disabled = true;
@@ -414,7 +408,9 @@
       btn.textContent = "Saving to Department Feed...";
 
       const title = document.getElementById('postTitle').value.trim();
-      const category = document.getElementById('postCat').value;
+      let category = document.getElementById('postCat').value;
+      if (category === "Department Event") category = "Event";
+
       const summary = document.getElementById('postSummary').value.trim();
       const link = document.getElementById('postLink').value.trim() || '#';
       
