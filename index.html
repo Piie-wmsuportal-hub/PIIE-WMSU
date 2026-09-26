@@ -140,7 +140,7 @@
           <h3 class="font-serif text-2xl font-bold text-slate-900">Department Bulletins & Announcements</h3>
         </div>
 
-        <!-- Filter Tabs -->
+        <!-- Filter Tabs (Strict Category Matching) -->
         <div class="flex items-center gap-1.5 overflow-x-auto hide-scrollbar pb-1 text-xs">
           <button onclick="filterPosts('all')" class="bulletin-tab active-tab px-3.5 py-1.5 rounded-lg font-bold bg-wmsu-crimson text-white transition shrink-0" data-cat="all">All</button>
           <button onclick="filterPosts('Academic')" class="bulletin-tab px-3.5 py-1.5 rounded-lg font-semibold bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition shrink-0" data-cat="Academic">Academic Memos</button>
@@ -331,7 +331,6 @@
 
   <script>
     const BIN_ID = "6ab7bc34ffd5d16053315598";
-    const MASTER_KEY = "$2a$10$bT88xC6BfXoVDcPLZDt6auptMYUoWimb3bqrZr6WoU75bDVw9KclG";
 
     let bulletins = [];
     let socials = {};
@@ -345,14 +344,10 @@
       grid.innerHTML = `<div class="col-span-full py-8 text-center text-slate-400 text-xs">Loading announcements...</div>`;
 
       try {
-        const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-          headers: {
-            "X-Master-Key": MASTER_KEY,
-            "X-Access-Key": MASTER_KEY
-          }
-        });
+        // Direct read with cache-busting query to avoid CORS preflight failures on public bins
+        const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?nocache=${Date.now()}`);
 
-        if (!response.ok) throw new Error("Cloud fetch failed: " + response.status);
+        if (!response.ok) throw new Error("Server returned status " + response.status);
         
         const data = await response.json();
         const record = data.record || {};
@@ -363,10 +358,8 @@
         renderBulletins(bulletins);
         renderSocialChannels();
       } catch (err) {
-        console.warn("Using local cache fallback:", err);
-        const storedB = localStorage.getItem('wmsu_ie_bulletins');
-        bulletins = storedB ? JSON.parse(storedB) : [];
-        renderBulletins(bulletins);
+        console.error("Fetch error:", err);
+        grid.innerHTML = `<div class="col-span-full py-8 text-center text-rose-500 text-xs font-semibold">Failed to load bulletins: ${err.message}</div>`;
       }
     }
 
@@ -468,7 +461,6 @@
       document.getElementById('socialPopup').classList.toggle('hidden');
     }
 
-    // Comprehensive category matcher (matches Event to Department Event, etc.)
     function filterPosts(cat) {
       document.querySelectorAll('.bulletin-tab').forEach(btn => {
         if (btn.dataset.cat.toLowerCase() === cat.toLowerCase()) {

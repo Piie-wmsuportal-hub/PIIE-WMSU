@@ -78,9 +78,9 @@
             <div>
               <label class="block font-semibold text-slate-300 mb-1">Category *</label>
               <select id="postCat" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-rose-500">
-                <option value="Academic">Academic Memo</option>
-                <option value="PIES">PIES Student Chapter</option>
-                <option value="OJT">OJT & Plant Visits</option>
+                <option value="Academic">Academic</option>
+                <option value="PIES">PIES</option>
+                <option value="OJT">OJT</option>
                 <option value="Event">Event</option>
               </select>
             </div>
@@ -231,8 +231,8 @@
     const BIN_ID = "6ab7bc34ffd5d16053315598";
     const MASTER_KEY = "$2a$10$bT88xC6BfXoVDcPLZDt6auptMYUoWimb3bqrZr6WoU75bDVw9KclG";
 
-    const CLOUDINARY_CLOUD_NAME = "wuyejn89"; 
-    const CLOUDINARY_PRESET = "wmsu_ie_preset";
+    const CLOUDINARY_CLOUD_NAME = "wuyejn89";[cite: 2]
+    const CLOUDINARY_PRESET = "wmsu_ie_preset";[cite: 1]
 
     let currentCloudData = {
       pin: "1904",
@@ -243,11 +243,10 @@
 
     async function pullCloudData() {
       try {
-        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?nocache=${Date.now()}`, {
           method: "GET",
           headers: { 
-            "X-Master-Key": MASTER_KEY,
-            "X-Access-Key": MASTER_KEY 
+            "X-Master-Key": MASTER_KEY
           }
         });
         
@@ -272,8 +271,7 @@
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            "X-Master-Key": MASTER_KEY,
-            "X-Access-Key": MASTER_KEY
+            "X-Master-Key": MASTER_KEY
           },
           body: JSON.stringify(currentCloudData)
         });
@@ -408,9 +406,7 @@
       btn.textContent = "Saving to Department Feed...";
 
       const title = document.getElementById('postTitle').value.trim();
-      let category = document.getElementById('postCat').value;
-      if (category === "Department Event") category = "Event";
-
+      const category = document.getElementById('postCat').value.trim();
       const summary = document.getElementById('postSummary').value.trim();
       const link = document.getElementById('postLink').value.trim() || '#';
       
