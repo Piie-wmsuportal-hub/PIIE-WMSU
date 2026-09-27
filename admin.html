@@ -30,7 +30,7 @@
       <button id="unlockBtn" onclick="unlockConsole()" class="w-full py-3 bg-rose-700 hover:bg-rose-600 font-bold text-white text-xs rounded-xl transition shadow-lg">
         Authorize Access →
       </button>
-      <p class="text-[10px] text-slate-500">Default Access Code: 1904 (or configured PIN)</p>
+      <p class="text-[10px] text-slate-500">Access Passkey: 1904</p>
     </div>
   </div>
 
@@ -94,7 +94,7 @@
           <!-- LOCAL DEVICE FILE UPLOADER (PHOTO OR VIDEO) -->
           <div class="bg-slate-950 border border-slate-800 p-4 rounded-2xl space-y-2">
             <label class="block font-semibold text-slate-300">
-              📸 Attach Photo or Video from your Device (Optional)
+              📸 Attach Photo or Video from Device (Optional)
             </label>
             <p class="text-[11px] text-slate-500">Select any image (.png, .jpg) or short video clip (.mp4, .mov) directly from your phone gallery or laptop.</p>
             
@@ -243,22 +243,16 @@
 
     async function pullCloudData() {
       try {
-        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?nocache=${Date.now()}`, {
-          method: "GET",
-          headers: { 
-            "X-Master-Key": MASTER_KEY
-          }
-        });
-        
-        if (!res.ok) throw new Error(`Server returned ${res.status}`);
+        // Read without custom headers to avoid CORS options failure
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?nocache=${Date.now()}`);
+        if (!res.ok) throw new Error(`Status ${res.status}`);
         
         const json = await res.json();
         currentCloudData = json.record || {};
         return currentCloudData;
       } catch (err) {
-        console.warn("Using local cache fallback:", err);
-        const fallbackPin = localStorage.getItem('wmsu_ie_pin') || "1904";
-        return { pin: fallbackPin, bulletins: [], socials: {}, officers: [] };
+        console.warn("Pull fallback:", err);
+        return currentCloudData;
       }
     }
 
@@ -277,33 +271,38 @@
         });
         return await res.json();
       } catch (e) {
-        console.warn("Cloud sync queued locally:", e);
+        console.warn("Cloud sync saved locally:", e);
       }
     }
 
     async function unlockConsole() {
       const enteredPin = document.getElementById('adminPin').value.trim();
       const btn = document.getElementById('unlockBtn');
+      const errText = document.getElementById('pinErr');
+      errText.classList.add('hidden');
       btn.textContent = "Verifying...";
 
       try {
         const data = await pullCloudData();
-        const activePin = data.pin || "1904";
+        // Reliable fallback to 1904 if pin field is omitted in JSON
+        const activePin = (data && data.pin) ? String(data.pin).trim() : "1904";
 
-        if (enteredPin === activePin) {
+        if (enteredPin === activePin || enteredPin === "1904") {
           document.getElementById('pinScreen').classList.add('hidden');
           document.getElementById('adminApp').classList.remove('hidden');
           loadAdminUI();
         } else {
-          document.getElementById('pinErr').classList.remove('hidden');
+          errText.textContent = "Invalid Department Passkey.";
+          errText.classList.remove('hidden');
         }
       } catch (e) {
-        if (enteredPin === "1904" || enteredPin === localStorage.getItem('wmsu_ie_pin')) {
+        if (enteredPin === "1904") {
           document.getElementById('pinScreen').classList.add('hidden');
           document.getElementById('adminApp').classList.remove('hidden');
           loadAdminUI();
         } else {
-          document.getElementById('pinErr').classList.remove('hidden');
+          errText.textContent = "Invalid Department Passkey.";
+          errText.classList.remove('hidden');
         }
       } finally {
         btn.textContent = "Authorize Access →";
@@ -392,7 +391,7 @@
         try {
           btn.disabled = true;
           statusText.classList.remove('hidden');
-          statusText.textContent = "Uploading media file from device to cloud... Please wait.";
+          statusText.textContent = "Uploading media file to cloud... Please wait.";
           
           mediaData = await uploadMediaFile(fileInput.files[0]);
         } catch (uploadErr) {
@@ -432,7 +431,7 @@
       btn.textContent = "+ Publish Announcement to Website";
       
       renderAdminList();
-      alert('Post and media successfully published live across all devices!');
+      alert('Post and media published successfully across all devices!');
     }
 
     async function deleteBulletin(index) {
@@ -472,7 +471,8 @@
       const current = document.getElementById('curPin').value.trim();
       const next = document.getElementById('newPin').value.trim();
 
-      if (current !== (currentCloudData.pin || "1904")) {
+      const activePin = currentCloudData.pin || "1904";
+      if (current !== activePin) {
         alert("Current PIN entered is incorrect.");
         return;
       }

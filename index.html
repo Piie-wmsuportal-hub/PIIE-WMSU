@@ -43,7 +43,7 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between antialiased selection:bg-wmsu-crimson selection:text-white">
 
-  <!-- Top Institutional Bar -->
+  <!-- Institutional Top Bar -->
   <div class="bg-wmsu-dark text-rose-100 text-[11px] sm:text-xs py-2 px-4 border-b border-rose-950">
     <div class="max-w-6xl mx-auto flex items-center justify-between">
       <div class="flex items-center gap-2 truncate">
@@ -58,11 +58,9 @@
     </div>
   </div>
 
-  <!-- Main Navigation Header -->
+  <!-- Header & Navigation -->
   <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
     <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-      
-      <!-- Dual Seals & Department Brand -->
       <div class="flex items-center gap-3 cursor-pointer" onclick="scrollToTop()">
         <div class="flex items-center -space-x-2">
           <img src="assets/wmsu-seal.png" onerror="this.src='https://via.placeholder.com/48?text=WMSU'" alt="WMSU Official Seal" class="w-11 h-11 object-contain drop-shadow-sm z-10">
@@ -129,7 +127,7 @@
     </div>
   </section>
 
-  <!-- Main Content Container -->
+  <!-- Main Content Area -->
   <main class="max-w-6xl w-full mx-auto px-4 sm:px-6 py-10 space-y-14">
 
     <!-- SECTION 1: LIVE BULLETIN BOARD -->
@@ -140,7 +138,7 @@
           <h3 class="font-serif text-2xl font-bold text-slate-900">Department Bulletins & Announcements</h3>
         </div>
 
-        <!-- Filter Tabs (Strict Category Matching) -->
+        <!-- Filter Tabs -->
         <div class="flex items-center gap-1.5 overflow-x-auto hide-scrollbar pb-1 text-xs">
           <button onclick="filterPosts('all')" class="bulletin-tab active-tab px-3.5 py-1.5 rounded-lg font-bold bg-wmsu-crimson text-white transition shrink-0" data-cat="all">All</button>
           <button onclick="filterPosts('Academic')" class="bulletin-tab px-3.5 py-1.5 rounded-lg font-semibold bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition shrink-0" data-cat="Academic">Academic Memos</button>
@@ -150,18 +148,18 @@
         </div>
       </div>
 
-      <!-- Dynamic Post Grid -->
+      <!-- Live Feed Grid -->
       <div id="bulletinGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        <div class="col-span-full py-8 text-center text-slate-400 text-xs">Loading announcements...</div>
+        <div class="col-span-full py-8 text-center text-slate-400 text-xs">Loading announcements from cloud...</div>
       </div>
     </section>
 
-    <!-- SECTION 2: BSIE CURRICULUM EXPLORER -->
+    <!-- SECTION 2: BSIE CURRICULUM -->
     <section id="curriculum" class="space-y-6">
       <div class="border-b border-slate-200 pb-4">
         <span class="text-[11px] uppercase font-bold tracking-wider text-wmsu-crimson">CMO-Compliant Program</span>
         <h3 class="font-serif text-2xl font-bold text-slate-900">Bachelor of Science in Industrial Engineering (BSIE)</h3>
-        <p class="text-xs text-slate-500 mt-1">Explore course sequencing and major prerequisite tracks.</p>
+        <p class="text-xs text-slate-500 mt-1">Course sequencing and major prerequisite tracks.</p>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -200,10 +198,10 @@
           </div>
           <h4 class="font-bold text-slate-900 text-sm">Operations Research & Ergonomics</h4>
           <ul class="text-xs text-slate-600 space-y-1.5 list-disc pl-4">
-            <li>Operations Research 1 (Deterministic)</li>
-            <li>Operations Research 2 (Probabilistic)</li>
+            <li>Operations Research 1 & 2</li>
             <li>Ergonomics 1 & 2 (Human Factors)</li>
             <li>Supply Chain Management</li>
+            <li>Quality Management Systems</li>
           </ul>
         </div>
 
@@ -215,15 +213,15 @@
           <h4 class="font-bold text-slate-900 text-sm">Plant Design & Internship</h4>
           <ul class="text-xs text-slate-600 space-y-1.5 list-disc pl-4">
             <li>Facilities Planning & Design</li>
-            <li>IE Capstone Project / Feasibility</li>
-            <li>Quality Management Systems (QMS)</li>
+            <li>IE Capstone Feasibility Project</li>
+            <li>Information Systems Engineering</li>
             <li>On-the-Job Training (240 Hours)</li>
           </ul>
         </div>
       </div>
     </section>
 
-    <!-- SECTION 3: UNDERGRADUATE RESEARCH ARCHIVE -->
+    <!-- SECTION 3: RESEARCH & CAPSTONE ARCHIVE -->
     <section id="research" class="space-y-6">
       <div class="border-b border-slate-200 pb-4">
         <span class="text-[11px] uppercase font-bold tracking-wider text-wmsu-crimson">Scholarly Works</span>
@@ -239,7 +237,7 @@
           </div>
           <h4 class="font-bold text-sm text-slate-900">Ergonomic Workstation Redesign and Musculoskeletal Risk Assessment in Zamboanga Canning Lines</h4>
           <p class="text-[11px] text-wmsu-muted font-medium">BSIE Capstone Group 3 (Adviser: Engr. A. Ingko)</p>
-          <p class="text-xs text-slate-600 pt-1 leading-relaxed border-t border-slate-100">Utilized RULA and REBA posture assessments to eliminate repetitive strain bottlenecks, projecting an 18% improvement in worker throughput.</p>
+          <p class="text-xs text-slate-600 pt-1 leading-relaxed border-t border-slate-100">Applied RULA and REBA posture metrics to mitigate repetitive motion bottlenecks across processing workstations.</p>
         </div>
 
         <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-2">
@@ -249,12 +247,12 @@
           </div>
           <h4 class="font-bold text-sm text-slate-900">Facility Layout Optimization for Municipal Cold Storage Distribution Using SLP Method</h4>
           <p class="text-[11px] text-wmsu-muted font-medium">BSIE Research Cohort 2025</p>
-          <p class="text-xs text-slate-600 pt-1 leading-relaxed border-t border-slate-100">Applied Systematic Layout Planning (SLP) to minimize total material handling distance for multi-temperature seafood commodities.</p>
+          <p class="text-xs text-slate-600 pt-1 leading-relaxed border-t border-slate-100">Minimized total material handling travel distances through Systematic Layout Planning (SLP) for commercial commodities.</p>
         </div>
       </div>
     </section>
 
-    <!-- SECTION 4: DEPARTMENT FACULTY DIRECTORY -->
+    <!-- SECTION 4: FACULTY DIRECTORY -->
     <section id="leadership" class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
       <div class="text-center max-w-xl mx-auto space-y-1">
         <span class="text-[11px] uppercase font-bold tracking-widest text-wmsu-crimson">Academic Mentorship</span>
@@ -331,7 +329,6 @@
 
   <script>
     const BIN_ID = "6ab7bc34ffd5d16053315598";
-
     let bulletins = [];
     let socials = {};
 
@@ -341,13 +338,13 @@
 
     async function fetchCloudData() {
       const grid = document.getElementById('bulletinGrid');
-      grid.innerHTML = `<div class="col-span-full py-8 text-center text-slate-400 text-xs">Loading announcements...</div>`;
+      grid.innerHTML = `<div class="col-span-full py-8 text-center text-slate-400 text-xs">Loading announcements from cloud...</div>`;
 
       try {
-        // Direct read with cache-busting query to avoid CORS preflight failures on public bins
+        // Direct read without custom headers to avoid CORS preflight failures on public bins
         const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?nocache=${Date.now()}`);
 
-        if (!response.ok) throw new Error("Server returned status " + response.status);
+        if (!response.ok) throw new Error("Status " + response.status);
         
         const data = await response.json();
         const record = data.record || {};
@@ -359,7 +356,13 @@
         renderSocialChannels();
       } catch (err) {
         console.error("Fetch error:", err);
-        grid.innerHTML = `<div class="col-span-full py-8 text-center text-rose-500 text-xs font-semibold">Failed to load bulletins: ${err.message}</div>`;
+        const storedB = localStorage.getItem('wmsu_ie_bulletins');
+        if (storedB) {
+          bulletins = JSON.parse(storedB);
+          renderBulletins(bulletins);
+        } else {
+          grid.innerHTML = `<div class="col-span-full py-8 text-center text-rose-500 text-xs font-semibold">Unable to load feed: ${err.message}</div>`;
+        }
       }
     }
 
