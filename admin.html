@@ -13,7 +13,7 @@
 </head>
 <body class="min-h-screen text-slate-100 flex flex-col justify-between">
 
-  <!-- PIN Protection Screen -->
+  <!-- PIN Screen -->
   <div id="pinScreen" class="fixed inset-0 bg-[#0A0F1D] z-50 flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 max-w-sm w-full text-center shadow-2xl space-y-4">
       <div class="w-14 h-14 rounded-2xl bg-rose-500/10 text-rose-500 border border-rose-500/20 flex items-center justify-center text-2xl mx-auto shadow-inner">
@@ -34,9 +34,8 @@
     </div>
   </div>
 
-  <!-- Main Management App -->
+  <!-- Management App -->
   <div id="adminApp" class="hidden">
-    <!-- Top Header -->
     <header class="bg-slate-900 border-b border-slate-800 px-4 py-3 sticky top-0 z-30">
       <div class="max-w-6xl mx-auto flex items-center justify-between">
         <div class="flex items-center gap-3">
@@ -60,7 +59,7 @@
 
     <main class="max-w-6xl mx-auto p-4 sm:p-6 space-y-8">
 
-      <!-- SECTION: PUBLISH NEW BULLETIN -->
+      <!-- SECTION: PUBLISH BULLETIN -->
       <section class="bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xl space-y-4">
         <div class="border-b border-slate-800 pb-3 flex items-center justify-between">
           <div>
@@ -81,7 +80,7 @@
                 <option value="Academic">Academic</option>
                 <option value="PIES">PIES</option>
                 <option value="OJT">OJT</option>
-                <option value="Event">Event</option>
+                <option value="Events">Events</option>
               </select>
             </div>
           </div>
@@ -91,7 +90,7 @@
             <textarea id="postSummary" rows="3" required placeholder="Write the full memo details or instructions here..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-rose-500"></textarea>
           </div>
 
-          <!-- LOCAL DEVICE FILE UPLOADER (PHOTO OR VIDEO) -->
+          <!-- Cloudinary Upload -->
           <div class="bg-slate-950 border border-slate-800 p-4 rounded-2xl space-y-2">
             <label class="block font-semibold text-slate-300">
               📸 Attach Photo or Video from Device (Optional)
@@ -113,7 +112,7 @@
         </form>
       </section>
 
-      <!-- ACTIVE ANNOUNCEMENTS LIST -->
+      <!-- ACTIVE BULLETINS -->
       <section class="bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xl space-y-4">
         <div class="flex items-center justify-between border-b border-slate-800 pb-3">
           <h3 class="font-bold text-sm text-white">Active Portal Bulletins</h3>
@@ -124,7 +123,7 @@
         <div id="adminBulletinList" class="space-y-3 text-xs"></div>
       </section>
 
-      <!-- SECTION: LINK SOCIALS & CHAT INBOX CHANNELS -->
+      <!-- SOCIAL LINKS -->
       <section class="bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xl space-y-4">
         <div class="border-b border-slate-800 pb-3">
           <h3 class="font-bold text-sm text-white">🔗 Social Media & Student Chat Channels</h3>
@@ -165,7 +164,7 @@
         </form>
       </section>
 
-      <!-- SECTION: SETTINGS & ACCESS CONTROL -->
+      <!-- SETTINGS & OFFICERS -->
       <section class="bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xl space-y-6">
         <div class="border-b border-slate-800 pb-3">
           <h3 class="font-bold text-sm text-white">⚙️ Department Portal Settings & Officer Access</h3>
@@ -231,8 +230,8 @@
     const BIN_ID = "6ab7bc34ffd5d16053315598";
     const MASTER_KEY = "$2a$10$bT88xC6BfXoVDcPLZDt6auptMYUoWimb3bqrZr6WoU75bDVw9KclG";
 
-    const CLOUDINARY_CLOUD_NAME = "wuyejn89";[cite: 2]
-    const CLOUDINARY_PRESET = "wmsu_ie_preset";[cite: 1]
+    const CLOUDINARY_CLOUD_NAME = "wuyejn89";
+    const CLOUDINARY_PRESET = "wmsu_ie_preset";
 
     let currentCloudData = {
       pin: "1904",
@@ -243,7 +242,6 @@
 
     async function pullCloudData() {
       try {
-        // Read without custom headers to avoid CORS options failure
         const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?nocache=${Date.now()}`);
         if (!res.ok) throw new Error(`Status ${res.status}`);
         
@@ -271,7 +269,7 @@
         });
         return await res.json();
       } catch (e) {
-        console.warn("Cloud sync saved locally:", e);
+        console.warn("Cloud sync stored locally:", e);
       }
     }
 
@@ -284,7 +282,6 @@
 
       try {
         const data = await pullCloudData();
-        // Reliable fallback to 1904 if pin field is omitted in JSON
         const activePin = (data && data.pin) ? String(data.pin).trim() : "1904";
 
         if (enteredPin === activePin || enteredPin === "1904") {
@@ -431,7 +428,7 @@
       btn.textContent = "+ Publish Announcement to Website";
       
       renderAdminList();
-      alert('Post and media published successfully across all devices!');
+      alert('Post published live across all devices!');
     }
 
     async function deleteBulletin(index) {
